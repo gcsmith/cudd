@@ -31,7 +31,22 @@
 *.out
 *.app
 
-# Misc
+# Generated Files (automake)
+
+*.dirstamp
+*.deps
+Doxyfile
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache
+config.*
+dddmp/exp/test*.sh
+html
+libtool
+stamp-h1
+
+# Miscellaneous
 *~
 *.lock
 *.DS_Store
@@ -40,3 +55,4 @@
 .vs
 CMakeSettings.json
 build*/*
+
