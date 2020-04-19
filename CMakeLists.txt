@@ -20,11 +20,49 @@ if(ENABLE_SHARED)
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
-include_directories(. cudd dddmp epd st mtr util)
+################################################################################
+# Generate config.h
+################################################################################
+
+include(CheckFunctionExists)
+check_function_exists(getrlimit HAVE_GETRLIMIT)
+check_function_exists(getrusage HAVE_GETRUSAGE)
+check_function_exists(powl HAVE_POWL)
+check_function_exists(sysconf HAVE_SYSCONF)
+
+include(CheckIncludeFiles)
+check_include_files(assert.h HAVE_ASSERT_H)
+check_include_files(inttypes.h HAVE_INTTYPES_H)
+check_include_files(stddef.h HAVE_STDDEF_H)
+check_include_files(stdint.h HAVE_STDINT_H)
+check_include_files(stdlib.h HAVE_STDLIB_H)
+check_include_files(string.h HAVE_STRING_H)
+check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
+check_include_files(sys/time.h HAVE_SYS_TIME_H)
+check_include_files(sys/times.h HAVE_SYS_TIMES_H)
+check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
+check_include_files(unistd.h HAVE_UNISTD_H)
+check_include_files("stdlib.h;stdarg.h;string.h;float.h" STDC_HEADERS)
+
+include(CheckSymbolExists)
+check_symbol_exists(INFINITY math.h HAVE_IEEE_754)
+
+include(CheckTypeSize)
+check_type_size(int SIZEOF_INT)
+check_type_size(long SIZEOF_LONG)
+check_type_size("long double" SIZEOF_LONG_DOUBLE)
+check_type_size("void*" SIZEOF_VOID_P)
+
+include(TestBigEndian)
+test_big_endian(WORDS_BIGENDIAN)
+
+configure_file(config.h.cmake config.h)
 
 ################################################################################
 # Build subdirectories
 ################################################################################
+
+include_directories(. cudd dddmp epd st mtr util ${PROJECT_BINARY_DIR})
 
 add_subdirectory(cudd)
 add_subdirectory(epd)
