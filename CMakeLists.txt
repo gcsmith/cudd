@@ -2,7 +2,7 @@
 # cudd
 ################################################################################
 
-cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 cmake_policy(SET CMP0048 NEW)
 project(cudd VERSION 3.0.0)
 
@@ -24,11 +24,8 @@ endif()
 # Generate config.h
 ################################################################################
 
-include(CheckFunctionExists)
-check_function_exists(getrlimit HAVE_GETRLIMIT)
-check_function_exists(getrusage HAVE_GETRUSAGE)
-check_function_exists(powl HAVE_POWL)
-check_function_exists(sysconf HAVE_SYSCONF)
+set(CMAKE_REQUIRED_INCLUDES "math.h")
+set(CMAKE_REQUIRED_LIBRARIES m)
 
 include(CheckIncludeFiles)
 check_include_files(assert.h HAVE_ASSERT_H)
@@ -46,6 +43,10 @@ check_include_files("stdlib.h;stdarg.h;string.h;float.h" STDC_HEADERS)
 
 include(CheckSymbolExists)
 check_symbol_exists(INFINITY math.h HAVE_IEEE_754)
+check_symbol_exists(getrlimit sys/resource.h HAVE_GETRLIMIT)
+check_symbol_exists(getrusage sys/resource.h HAVE_GETRUSAGE)
+check_symbol_exists(powl math.h HAVE_POWL)
+check_symbol_exists(sysconf unistd.h HAVE_SYSCONF)
 
 include(CheckTypeSize)
 check_type_size(int SIZEOF_INT)
